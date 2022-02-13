@@ -1,9 +1,21 @@
 {
+  "player": {
+    "name": "",
+    "position": [
+      0,
+      0
+    ]
+  },
   "inventory": {
     "food": {},
     "weapons": {},
     "armor": {},
     "misc": {},
     "special_items": {}
-  }
+  },
+  "achievements": {
+    "all": [],
+    "unlocked": []
+  },
+  "gameover": false
 }
