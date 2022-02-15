@@ -23,5 +23,6 @@
     ],
     "unlocked": []
   },
-  "gameover": false
+  "gameover": false,
+  "newGame": true
 }
