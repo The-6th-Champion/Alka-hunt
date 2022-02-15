@@ -7,17 +7,15 @@
     ]
   },
   "inventory": {
-    "food": {},
+    "materials": {},
     "weapons": {},
-    "armor": {},
-    "misc": {},
-    "special_items": {}
+    "components": {}
   },
   "achievements": {
     "all": [
       "32 bezoars",
       "64g Cinnabar",
-      "128mg Vitriol of Mars",
+      "128mol Vitriol of Mars",
       "Dragon's Horn",
       "Mix for 256 seconds",
       "Alkahest",
