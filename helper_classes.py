@@ -10,7 +10,21 @@ class PlayerData:
             achievement_data=load_data["achievements"])
         self.gameover = load_data["gameover"]
     def save(self) -> Dict:
-        raise NotImplementedError
+        import json
+        data = {
+            "player": self.player_info.player_info,
+            "inventory": self.inventory.inventory,
+            "achievements": {
+                "all": self.achievements.all, 
+                "unlocked": self.achievements.unlocked
+                },
+            "gameover": self.gameover,
+            "newGame": False
+            }
+        print(data)
+        with open(".\playerData.json", "w") as fpdata:
+            fpdata.write(json.dumps(data, indent=4))
+        return f"Saved Successfully, {data['player']['name']}"
 
 
 class Achievements:
@@ -36,9 +50,13 @@ class Inventory:
     def __init__(self, inventory_data: Dict) -> None:
         self.inventory = inventory_data
 
-    def add_items(self, type: str, *, items: List[Tuple[str, int]]):
+    def add_items(self, category: str, *, items: List[Tuple[str, int]]):
         for item in items:
-            self.inventory[type][item[0]] = item[1]
+            if item[0] not in self.inventory[category]:
+                self.inventory[category][item[0]] = item[1]
+            else:
+                self.inventory[category][item[0]] += item[1]
+                
 
     def view_items(self, category: Optional[str] = None) -> List[str]:
         output: str = ""
@@ -48,26 +66,26 @@ class Inventory:
                 output += f"    {item}: {count}\n"
         else:
             for cat in self.inventory:
-                output += f"{cat}:\n"
+                output += f"\t{cat}:\n"
         return output
 
 
 class Commands:
 
     @classmethod
-    def tbd() -> None:
+    def tbd(self) -> None:
         pass
 
     @classmethod
-    def save(data: PlayerData):
+    def save(self, data: PlayerData):
         data.save()
 
     @classmethod
-    def stop(data: PlayerData):
+    def stop(self, data: PlayerData):
         exit()
 
     @classmethod
-    def inventory(data: PlayerData):
+    def inventory(self, data: PlayerData):
         output: str = ""
         categories: str = data.inventory.view_items()
         print("Choose a category:\n", categories)
@@ -76,9 +94,9 @@ class Commands:
         return output
     
     @classmethod
-    def grab(data: PlayerData, item: Tuple[str, int]):
+    def grab(self, data: PlayerData, item: Tuple[str, int]):
         data.inventory.add_items()
     
     @classmethod
-    def help(data: PlayerData):
+    def help(self, data: PlayerData):
         print("Command list")
