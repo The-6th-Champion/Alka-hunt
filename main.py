@@ -47,6 +47,6 @@ if __name__ == '__main__':
                               ] = json.load(fpdata)
     if raw_player_data["newGame"] == True:
         raw_player_data["player"]["name"] = input("Enter player name >> ")
-    print("Welcome to Alka-hassle!")
+    print(f'Welcome to Alka-hassle, {raw_player_data["player"]["name"]}!')
     player_data: PlayerData = PlayerData(raw_player_data)
     main(player_data)
