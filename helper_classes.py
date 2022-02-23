@@ -1,5 +1,5 @@
 from typing import List, Optional, Tuple, Dict
-from global_vars import items
+from global_vars import *
 
 
 class PlayerData:
@@ -94,6 +94,7 @@ class Inventory:
         return output
 
 
+
 class Commands:
 
     @classmethod
@@ -158,3 +159,11 @@ class Commands:
     @classmethod
     def show(self, data: PlayerData):
         return ", ".join(data.area_map.reveal_items())
+
+    @classmethod
+    def hunt(self, data: PlayerData, animal: str):
+        if animal in animals:
+            data.inventory.add_items("materials", animals[animal])
+            return f"You have recieved {animals[animal][1]} {animals[animal][0]}{'s.' if animals[animal][1] > 1 else '.'}"
+        else:
+            return "This is not a valid animal! Maybe use 'grab' instead."

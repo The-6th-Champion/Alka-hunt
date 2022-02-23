@@ -7,7 +7,10 @@
     ]
   },
   "inventory": {
-    "materials": {},
+    "materials": {
+      "spoon": 1,
+      "sulfate": 128
+    },
     "weapons": {},
     "components": {}
   },

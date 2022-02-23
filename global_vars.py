@@ -13,3 +13,9 @@ items: Dict[str, Tuple[str, str]] = {
     "Dragon's Horn": ("component", "The horn of a dragon, and one of the only materials that can hold Alkahest. Must use a hot sword to cut it off."),
     "Alkahest": ("material", "The universal solvent. Congradulations, you have completed the game!")
 }
+
+animals = {
+    "goat": ("bezoar", 3),
+    "bird": ("bezoar", 1),
+    "dragon": ("bezoar", 20)
+}
