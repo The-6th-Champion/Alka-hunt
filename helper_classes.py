@@ -167,3 +167,15 @@ class Commands:
             return f"You have recieved {animals[animal][1]} {animals[animal][0]}{'s.' if animals[animal][1] > 1 else '.'}"
         else:
             return "This is not a valid animal! Maybe use 'grab' instead."
+
+
+class Listener:
+    def inventoryListener(data: PlayerData):
+        if "alkahest" in data.inventory.inventory:
+            print("CONGRADULATIONS, YOU HAVE FINISHED THE GAME!")
+            data.gameover = True
+            data.achievements.unlock("Alkahest")
+            data.save()
+            print("DATA SAVED!")
+
+    
