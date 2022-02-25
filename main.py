@@ -29,6 +29,8 @@ def game(player_data: PlayerData) -> None:
         else:
             print("this is not a command. use the 'help' command for a list of commands.")
 
+        player_data.achievements.inventoryListener()
+
 
 if __name__ == '__main__':
     with open("./playerData.json", "r") as fpdata:

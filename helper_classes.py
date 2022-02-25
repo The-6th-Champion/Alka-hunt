@@ -52,12 +52,46 @@ class AreaMap:
 class Achievements:
     def __init__(self, achievement_data) -> None:
         self.all = achievement_data["all"]
-        self.unlocked = achievement_data["unlocked"]
+        self.unlocked: List = achievement_data["unlocked"]
         print("Achievements synced!")
 
     def unlock(self, achievement) -> None:
         self.unlocked.append(achievement)
 
+    def inventoryListener(data: PlayerData):
+        if "alkahest" in data.inventory.inventory:
+            print("CONGRADULATIONS, YOU HAVE FINISHED THE GAME!")
+            data.gameover = True
+            data.achievements.unlock("Alkahest")
+            data.save()
+            print("DATA SAVED!")
+        if data.inventory.inventory["bezoars"] == 32:
+            data.achievements.unlock("32 bezoars")
+            data.save()
+            print("DATA SAVED!")
+        if data.inventory.inventory["Cinnabar"] == 64:
+            data.achievements.unlock("64g Cinnabar")
+            data.save()
+            print("DATA SAVED!")
+        if data.inventory.inventory["Vitriol of Mars"] == 128:
+            data.achievements.unlock("128mol Vitriol of Mars")
+            data.save()
+            print("DATA SAVED!")
+        if data.inventory.inventory["Dragon's Horn"] == 1:
+            data.achievements.unlock("Dragon's Horn")
+            data.save()
+            print("DATA SAVED!")
+        if data.inventory.inventory["spoon"] == 0:
+            print("Your spoon was vaporized!")
+            data.achievements.unlock("Its gone??")
+            data.save()
+            print("DATA SAVED!")
+        
+        if data.achievements.all == data.achievements.unlocked:
+            print("You have collected everything possible!")
+            data.achievements.unlock("Master Alchemist!")
+            data.save()
+            print("DATA SAVED!")
 
 class Information:
     def __init__(self, info_data) -> None:
@@ -168,14 +202,3 @@ class Commands:
         else:
             return "This is not a valid animal! Maybe use 'grab' instead."
 
-
-class Listener:
-    def inventoryListener(data: PlayerData):
-        if "alkahest" in data.inventory.inventory:
-            print("CONGRADULATIONS, YOU HAVE FINISHED THE GAME!")
-            data.gameover = True
-            data.achievements.unlock("Alkahest")
-            data.save()
-            print("DATA SAVED!")
-
-    
