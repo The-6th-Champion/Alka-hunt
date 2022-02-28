@@ -17,7 +17,8 @@ class PlayerData:
     def save(self) -> Dict:
         import json
         self.player_info.position = self.area_map.player_cursor
-        self.area_map.area_map[self.area_map.player_cursor[0]][self.area_map.player_cursor[1]].remove("player")
+        self.area_map.area_map[self.area_map.player_cursor[0]
+                               ][self.area_map.player_cursor[1]].remove("player")
         data = {
             "player": self.player_info.player_info,
             "inventory": self.inventory.inventory,
@@ -32,7 +33,8 @@ class PlayerData:
         print(data)
         with open(".\data\playerData.json", "w") as fpdata:
             fpdata.write(json.dumps(data, indent=4))
-        self.area_map.area_map[self.area_map.player_cursor[0]][self.area_map.player_cursor[1]].append("player")
+        self.area_map.area_map[self.area_map.player_cursor[0]
+                               ][self.area_map.player_cursor[1]].append("player")
         return f"Saved Successfully, {data['player']['name']}"
 
 
@@ -40,13 +42,16 @@ class AreaMap:
     def __init__(self, map_data, current_position) -> None:
         self.area_map: List[List[str]] = map_data
         self.player_cursor = current_position
-        self.area_map[self.player_cursor[0]][self.player_cursor[1]].append("player")
+        self.area_map[self.player_cursor[0]
+                      ][self.player_cursor[1]].append("player")
         print("Added to map!")
 
     def move_player(self, new_pos) -> None:
-        self.area_map[self.player_cursor[0]][self.player_cursor[1]].remove("player")
+        self.area_map[self.player_cursor[0]
+                      ][self.player_cursor[1]].remove("player")
         self.player_cursor = new_pos
-        self.area_map[self.player_cursor[0]][self.player_cursor[1]].append("player")
+        self.area_map[self.player_cursor[0]
+                      ][self.player_cursor[1]].append("player")
 
     def reveal_items(self):
         return self.area_map[self.player_cursor[0]][self.player_cursor[1]]
@@ -90,12 +95,13 @@ class Achievements:
             data.achievements.unlock("Its gone??")
             data.save()
             print("DATA SAVED!")
-        
+
         if data.achievements.all == data.achievements.unlocked:
             print("You have collected everything possible!")
             data.achievements.unlock("Master Alchemist!")
             data.save()
             print("DATA SAVED!")
+
 
 class Information:
     def __init__(self, info_data) -> None:
@@ -132,7 +138,6 @@ class Inventory:
         return output
 
 
-
 class Commands:
 
     @classmethod
@@ -140,7 +145,7 @@ class Commands:
         pass
 
     @classmethod
-    def move(self, data: PlayerData, directions):
+    def move(self, data: PlayerData, directions: List[str]):
         player_pos = data.area_map.player_cursor.copy()
         if not directions:
             return "Try that again, but with a direction (up, down, left, right)"
@@ -151,22 +156,24 @@ class Commands:
                     player_pos[0] = 0
                     print("You cannot move farther up")
             elif direction == "down":
-                data.player_info.position[0] += 1
-                if (data.player_info.position[0] >= 14):
-                    data.player_info.position[0] = 14
+                player_pos[0] += 1
+                if (player_pos[0] >= 14):
+                    player_pos[0] = 14
                     print("You cannot move farther down")
             elif direction == "left":
-                data.player_info.position[1] -= 1
-                if (data.player_info.position[1] <= 0):
-                    data.player_info.position[1] = 0
+                player_pos[1] -= 1
+                if (player_pos[1] <= 0):
+                    player_pos[1] = 0
                     print("You cannot move farther left")
             elif direction == "right":
-                data.player_info.position[1] += 1
-                if (data.player_info.position[1] >= 14):
-                    data.player_info.position[1] = 14
+                print("debur")
+                player_pos[1] += 1
+                print("added")
+                if (player_pos[1] >= 14):
+                    player_pos[1] = 14
                     print("You cannot move farther right")
         data.area_map.move_player(player_pos)
-        return "Surroundings: " + "".join(data.area_map.reveal_items())
+        return "Surroundings: " + ", ".join(data.area_map.reveal_items())
 
     @classmethod
     def save(self, data: PlayerData):
@@ -174,7 +181,8 @@ class Commands:
 
     @classmethod
     def stop(self, data: PlayerData):
-        data.area_map.area_map[data.area_map.player_cursor[0]][data.area_map.player_cursor[1]].remove("player")
+        data.area_map.area_map[data.area_map.player_cursor[0]
+                               ][data.area_map.player_cursor[1]].remove("player")
         exit()
 
     @classmethod
@@ -187,8 +195,10 @@ class Commands:
         return output
 
     @classmethod
-    def grab(self, data: PlayerData, item: Tuple[str, int]):
-        data.inventory.add_items(items[item][0], item)
+    def grab(self, data: PlayerData, item: List[str]):
+        data.inventory.add_items(
+            category=items[item[0]][0]+"s", 
+            items=[(item, 1)])
 
     @classmethod
     def help(self, data: PlayerData):
@@ -196,7 +206,7 @@ class Commands:
 
     @classmethod
     def show(self, data: PlayerData):
-        return ", ".join(data.area_map.reveal_items())
+        return str(data.area_map.player_cursor) + " - " + ", ".join(data.area_map.reveal_items())
 
     @classmethod
     def hunt(self, data: PlayerData, animal: str):
@@ -205,4 +215,3 @@ class Commands:
             return f"You have recieved {animals[animal][1]} {animals[animal][0]}{'s.' if animals[animal][1] > 1 else '.'}"
         else:
             return "This is not a valid animal! Maybe use 'grab' instead."
-
