@@ -14,44 +14,44 @@ class PlayerData:
         self.area_map: AreaMap = AreaMap(
             map_data=load_data["area_map"], current_position=load_data["player"]["position"])
 
-    def save(self) -> Dict:
-        import json
-        self.player_info.position = self.area_map.player_cursor
-        self.area_map.area_map[self.area_map.player_cursor[0]
-                               ][self.area_map.player_cursor[1]].remove("player")
-        data = {
-            "player": self.player_info.player_info,
-            "inventory": self.inventory.inventory,
-            "achievements": {
-                "all": self.achievements.all,
-                "unlocked": self.achievements.unlocked
-            },
-            "gameover": self.gameover,
-            "newGame": False,
-            "area_map": self.area_map.area_map
-        }
-        print(data)
-        with open(".\data\playerData.json", "w") as fpdata:
-            fpdata.write(json.dumps(data, indent=4))
-        self.area_map.area_map[self.area_map.player_cursor[0]
-                               ][self.area_map.player_cursor[1]].append("player")
-        return f"Saved Successfully, {data['player']['name']}"
+    # def save(self) -> str:
+    #     import json
+    #     self.player_info.position = self.area_map.player_cursor
+    #     self.area_map.area_map[self.area_map.player_cursor[0]
+    #                            ][self.area_map.player_cursor[1]].remove("player")
+    #     data = {
+    #         "player": self.player_info.player_info,
+    #         "inventory": self.inventory.inventory,
+    #         "achievements": {
+    #             "all": self.achievements.all,
+    #             "unlocked": self.achievements.unlocked
+    #         },
+    #         "gameover": self.gameover,
+    #         "newGame": False,
+    #         "area_map": self.area_map.area_map
+    #     }
+    #     with open(".\data\playerData.json", "w") as fpdata:
+    #         fpdata.write(json.dumps(data, indent=4))
+    #     self.area_map.area_map[self.area_map.player_cursor[0]
+    #                            ][self.area_map.player_cursor[1]].append("player")
+    #     return f"Saved Successfully, {data['player']['name']}"
 
 
 class AreaMap:
-    def __init__(self, map_data, current_position) -> None:
+    def __init__(self, map_data: List[List[str]], current_position: List[str]) -> None:
         self.area_map: List[List[str]] = map_data
-        self.player_cursor = current_position
+        self.player_cursor: List[int] = current_position
         self.area_map[self.player_cursor[0]
                       ][self.player_cursor[1]].append("player")
         print("Added to map!")
 
-    def move_player(self, new_pos) -> None:
+    def move_player(self, new_pos: List[str]) -> bool:
         self.area_map[self.player_cursor[0]
                       ][self.player_cursor[1]].remove("player")
         self.player_cursor = new_pos
         self.area_map[self.player_cursor[0]
                       ][self.player_cursor[1]].append("player")
+        return True
 
     def reveal_items(self):
         return self.area_map[self.player_cursor[0]][self.player_cursor[1]]
@@ -144,6 +144,7 @@ class Commands:
     def tbd(self) -> None:
         pass
 
+    # collegeboard function
     @classmethod
     def move(self, data: PlayerData, directions: List[str]):
         player_pos = data.area_map.player_cursor.copy()
@@ -175,9 +176,9 @@ class Commands:
         data.area_map.move_player(player_pos)
         return "Surroundings: " + ", ".join(data.area_map.reveal_items())
 
-    @classmethod
-    def save(self, data: PlayerData):
-        data.save()
+    # @classmethod
+    # def save(self, data: PlayerData):
+    #     data.save()
 
     @classmethod
     def stop(self, data: PlayerData):

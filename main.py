@@ -1,11 +1,9 @@
-import json
 from typing import List, Dict, Optional, Union, Tuple, Callable
-import os
 from helper_classes import *
 from global_vars import items
 
 commands: Dict[str, Callable] = {
-    "save": Commands.save,
+    "save": Commands.tbd,
     "stop": Commands.stop,
     "inventory": Commands.inventory,
     "grab": Commands.grab,
@@ -14,7 +12,6 @@ commands: Dict[str, Callable] = {
     "show": Commands.show
 }
 
-#  AP CREATE FUNCTION
 def game(player_data: PlayerData) -> None:
     # Game loop
     while True:
@@ -33,9 +30,243 @@ def game(player_data: PlayerData) -> None:
 
 
 if __name__ == '__main__':
-    with open("./data/playerData.json", "r") as fpdata:
-        raw_player_data: Dict[str, Union[str, Dict[str, int]]
-                              ] = json.load(fpdata)
+    raw_player_data: Dict[str, Union[str, Dict[str, int]]
+                              ] = {
+  "player": {
+    "name": "",
+    "position": [7, 7]
+  },
+  "inventory": {
+    "materials": {
+      "spoon": 1,
+      "sulfate": 128
+    },
+    "weapons": {},
+    "components": {}
+  },
+  "achievements": {
+    "all": [
+      "32 bezoars",
+      "64g Cinnabar",
+      "128mol Vitriol of Mars",
+      "Dragon's Horn",
+      "Its gone??",
+      "Alkahest"
+    ],
+    "unlocked": []
+  },
+  "gameover": False,
+  "newGame": True,
+  "area_map": [
+    [
+      ["goat", "goat", "steel sword"],
+      [],
+      [],
+      [],
+      [],
+      [],
+      [],
+      [],
+      [],
+      [],
+      [],
+      [],
+      [],
+      [],
+      []
+    ],
+    [[], [], [], [], [], [], [], [], [], [], [], [], [], [], []],
+    [
+      ["firewood"],
+      ["firewood"],
+      ["firewood"],
+      ["firewood"],
+      ["firewood"],
+      ["firewood"],
+      [],
+      [],
+      [],
+      [],
+      [],
+      [],
+      [],
+      [],
+      []
+    ],
+    [
+      ["firewood"],
+      ["firewood"],
+      ["firewood"],
+      ["firewood"],
+      ["firewood"],
+      ["firewood"],
+      [],
+      [],
+      [],
+      [],
+      [],
+      [],
+      [],
+      [],
+      []
+    ],
+    [
+      ["firewood"],
+      ["firewood"],
+      ["firewood"],
+      ["firewood"],
+      ["firewood"],
+      ["firewood"],
+      [],
+      [],
+      [],
+      [],
+      [],
+      ["goat", "goat"],
+      ["goat", "goat"],
+      [],
+      []
+    ],
+    [
+      [],
+      [],
+      [],
+      [],
+      [],
+      [],
+      [],
+      [],
+      [],
+      ["bird", "goat"],
+      ["goat", "goat"],
+      [],
+      ["bird"],
+      [],
+      []
+    ],
+    [
+      [],
+      [],
+      [],
+      [],
+      [],
+      [],
+      [],
+      [],
+      [],
+      ["bird", "goat"],
+      ["goat", "goat"],
+      [],
+      [],
+      [],
+      []
+    ],
+    [
+      [],
+      [],
+      [],
+      [],
+      [],
+      [],
+      [],
+      [],
+      [],
+      ["bird", "goat"],
+      ["goat", "goat"],
+      [],
+      [],
+      [],
+      []
+    ],
+    [
+      [],
+      [],
+      [],
+      [],
+      [],
+      [],
+      [],
+      [],
+      [],
+      ["bird", "goat"],
+      ["goat", "goat"],
+      [],
+      [],
+      [],
+      []
+    ],
+    [[], [], [], [], [], [], [], [], [], [], [], [], [], [], []],
+    [[], [], [], [], [], [], [], [], [], [], [], [], [], [], []],
+    [
+      [],
+      [],
+      [],
+      [],
+      [],
+      [],
+      [],
+      [],
+      [],
+      [],
+      ["dragon", "Cinnabar", "Cinnabar"],
+      ["Cinnabar", "Cinnabar", "Cinnabar"],
+      ["Cinnabar", "Cinnabar", "Cinnabar"],
+      ["Cinnabar", "Cinnabar", "Cinnabar"],
+      ["Cinnabar", "Cinnabar", "Cinnabar"]
+    ],
+    [
+      [],
+      [],
+      [],
+      [],
+      [],
+      [],
+      [],
+      [],
+      [],
+      [],
+      [],
+      ["Cinnabar", "Cinnabar", "Cinnabar"],
+      ["Cinnabar", "Cinnabar", "Cinnabar"],
+      ["Cinnabar", "Cinnabar", "Cinnabar"]
+    ],
+    [
+      [],
+      [],
+      [],
+      [],
+      [],
+      [],
+      [],
+      [],
+      [],
+      [],
+      [],
+      [],
+      ["bird", "Cinnabar", "Cinnabar", "Cinnabar"],
+      ["Cinnabar", "Cinnabar", "Cinnabar"],
+      ["Cinnabar", "Cinnabar", "Cinnabar"]
+    ],
+    [
+      [],
+      [],
+      [],
+      [],
+      [],
+      [],
+      [],
+      [],
+      [],
+      [],
+      [],
+      [],
+      [],
+      ["Cinnabar", "Cinnabar", "Cinnabar"],
+      ["Cinnabar", "Cinnabar", "Cinnabar"]
+    ]
+  ]
+}
+
     if raw_player_data["newGame"] == True:
         raw_player_data["player"]["name"] = input("Enter player name >> ")
     print(f'Welcome to Alka-hassle, {raw_player_data["player"]["name"]}!')
