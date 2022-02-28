@@ -29,11 +29,11 @@ def game(player_data: PlayerData) -> None:
         else:
             print("this is not a command. use the 'help' command for a list of commands.")
 
-        player_data.achievements.inventoryListener()
+        Achievements.inventoryListener(player_data)
 
 
 if __name__ == '__main__':
-    with open("./playerData.json", "r") as fpdata:
+    with open("./data/playerData.json", "r") as fpdata:
         raw_player_data: Dict[str, Union[str, Dict[str, int]]
                               ] = json.load(fpdata)
     if raw_player_data["newGame"] == True:

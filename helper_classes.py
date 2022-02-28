@@ -17,6 +17,7 @@ class PlayerData:
     def save(self) -> Dict:
         import json
         self.player_info.position = self.area_map.player_cursor
+        self.area_map.area_map[self.area_map.player_cursor[0]][self.area_map.player_cursor[1]].remove("player")
         data = {
             "player": self.player_info.player_info,
             "inventory": self.inventory.inventory,
@@ -25,11 +26,13 @@ class PlayerData:
                 "unlocked": self.achievements.unlocked
             },
             "gameover": self.gameover,
-            "newGame": False
+            "newGame": False,
+            "area_map": self.area_map.area_map
         }
         print(data)
-        with open(".\playerData.json", "w") as fpdata:
+        with open(".\data\playerData.json", "w") as fpdata:
             fpdata.write(json.dumps(data, indent=4))
+        self.area_map.area_map[self.area_map.player_cursor[0]][self.area_map.player_cursor[1]].append("player")
         return f"Saved Successfully, {data['player']['name']}"
 
 
@@ -58,30 +61,31 @@ class Achievements:
     def unlock(self, achievement) -> None:
         self.unlocked.append(achievement)
 
-    def inventoryListener(data: PlayerData):
+    @classmethod
+    def inventoryListener(self, data: PlayerData):
         if "alkahest" in data.inventory.inventory:
             print("CONGRADULATIONS, YOU HAVE FINISHED THE GAME!")
             data.gameover = True
             data.achievements.unlock("Alkahest")
             data.save()
             print("DATA SAVED!")
-        if data.inventory.inventory["bezoars"] == 32:
+        if "bezoars" in data.inventory.inventory and data.inventory.inventory["bezoars"] == 32:
             data.achievements.unlock("32 bezoars")
             data.save()
             print("DATA SAVED!")
-        if data.inventory.inventory["Cinnabar"] == 64:
+        if "Cinnabar" in data.inventory.inventory and data.inventory.inventory["Cinnabar"] == 64:
             data.achievements.unlock("64g Cinnabar")
             data.save()
             print("DATA SAVED!")
-        if data.inventory.inventory["Vitriol of Mars"] == 128:
+        if "Vitriol of Mars" in data.inventory.inventory and data.inventory.inventory["Vitriol of Mars"] == 128:
             data.achievements.unlock("128mol Vitriol of Mars")
             data.save()
             print("DATA SAVED!")
-        if data.inventory.inventory["Dragon's Horn"] == 1:
+        if "Dragon's Horn" in data.inventory.inventory and data.inventory.inventory["Dragon's Horn"] == 1:
             data.achievements.unlock("Dragon's Horn")
             data.save()
             print("DATA SAVED!")
-        if data.inventory.inventory["spoon"] == 0:
+        if "spoon" in data.inventory.inventory and data.inventory.inventory["spoon"] == 0:
             print("Your spoon was vaporized!")
             data.achievements.unlock("Its gone??")
             data.save()
@@ -152,14 +156,14 @@ class Commands:
                     data.player_info.position[0] = 14
                     print("You cannot move farther down")
             elif direction == "left":
-                data.player_info.position[0] -= 1
-                if (data.player_info.position[0] <= 0):
-                    data.player_info.position[0] = 0
+                data.player_info.position[1] -= 1
+                if (data.player_info.position[1] <= 0):
+                    data.player_info.position[1] = 0
                     print("You cannot move farther left")
             elif direction == "right":
-                data.player_info.position[0] += 1
-                if (data.player_info.position[0] >= 14):
-                    data.player_info.position[0] = 14
+                data.player_info.position[1] += 1
+                if (data.player_info.position[1] >= 14):
+                    data.player_info.position[1] = 14
                     print("You cannot move farther right")
         data.area_map.move_player(player_pos)
         return "Surroundings: " + "".join(data.area_map.reveal_items())
@@ -170,7 +174,7 @@ class Commands:
 
     @classmethod
     def stop(self, data: PlayerData):
-        self.area_map.area_map[self.player_info.position[0]][self.player_info.position[1]].remove("player")
+        data.area_map.area_map[data.area_map.player_cursor[0]][data.area_map.player_cursor[1]].remove("player")
         exit()
 
     @classmethod
