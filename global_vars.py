@@ -1,4 +1,4 @@
-from typing import Dict, Tuple
+from typing import Dict, List, Tuple
 
 items: Dict[str, Tuple[str, str]] = {
     "steal sword": ("weapon", "A relatively weak weapon, can be used to attack most animals"),
@@ -14,7 +14,7 @@ items: Dict[str, Tuple[str, str]] = {
     "Alkahest": ("material", "The universal solvent. Congradulations, you have completed the game!")
 }
 
-animals = {
+animals: Dict[str, Tuple[str, int]] = {
     "goat": ("bezoar", 3),
     "bird": ("bezoar", 1),
     "dragon": ("bezoar", 20)

@@ -9,13 +9,15 @@ commands: Dict[str, Callable] = {
     "grab": Commands.grab,
     "move": Commands.move,
     "help": Commands.help,
-    "show": Commands.show
+    "show": Commands.show,
+    "hunt": Commands.hunt,
+    "achievements": Commands.achievements,
 }
 
 def game(player_data: PlayerData) -> None:
     # Game loop
     while True:
-        prompt = input(">> ").strip().split(" ")
+        prompt: List[str] = input("\n>> ").strip().split(" ")
         if not prompt:
             continue
         if prompt[0] in commands and len(prompt) > 1:
@@ -269,6 +271,6 @@ if __name__ == '__main__':
 
     if raw_player_data["newGame"] == True:
         raw_player_data["player"]["name"] = input("Enter player name >> ")
-    print(f'Welcome to Alka-hassle, {raw_player_data["player"]["name"]}!')
+    print(f'Welcome to Alka-hunt, {raw_player_data["player"]["name"]}!')
     player_data: PlayerData = PlayerData(raw_player_data)
     game(player_data)

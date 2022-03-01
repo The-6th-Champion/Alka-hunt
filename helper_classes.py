@@ -1,3 +1,4 @@
+from re import sub
 from typing import List, Optional, Tuple, Dict
 from global_vars import *
 
@@ -39,11 +40,11 @@ class PlayerData:
 
 class AreaMap:
     def __init__(self, map_data: List[List[str]], current_position: List[str]) -> None:
-        self.area_map: List[List[str]] = map_data
+        self.area_map: List[List[List[str]]] = map_data
         self.player_cursor: List[int] = current_position
         self.area_map[self.player_cursor[0]
                       ][self.player_cursor[1]].append("player")
-        print("Added to map!")
+        print(Pretty.perfect("Added to map!") + "\u2705")
 
     def move_player(self, new_pos: List[str]) -> bool:
         self.area_map[self.player_cursor[0]
@@ -53,54 +54,44 @@ class AreaMap:
                       ][self.player_cursor[1]].append("player")
         return True
 
-    def reveal_items(self):
-        return self.area_map[self.player_cursor[0]][self.player_cursor[1]]
+    def reveal_items(self) -> List[str]:
+        items: List[str] = self.area_map[self.player_cursor[0]][self.player_cursor[1]].copy()
+        items.remove("player")
+        return items
 
 
 class Achievements:
     def __init__(self, achievement_data) -> None:
-        self.all = achievement_data["all"]
-        self.unlocked: List = achievement_data["unlocked"]
-        print("Achievements synced!")
+        self.all: List[str] = achievement_data["all"]
+        self.unlocked: List[str] = achievement_data["unlocked"]
+        print(Pretty.perfect("Achievements synced!") + "\u2705")
 
     def unlock(self, achievement) -> None:
+        print(Pretty.success(f"Achieved: {achievement}"))
         self.unlocked.append(achievement)
 
     @classmethod
-    def inventoryListener(self, data: PlayerData):
+    def inventoryListener(self, data: PlayerData) -> None:
         if "alkahest" in data.inventory.inventory:
-            print("CONGRADULATIONS, YOU HAVE FINISHED THE GAME!")
+            print(Pretty.perfect("CONGRADULATIONS, YOU HAVE FINISHED THE GAME!"))
             data.gameover = True
             data.achievements.unlock("Alkahest")
-            data.save()
-            print("DATA SAVED!")
-        if "bezoars" in data.inventory.inventory and data.inventory.inventory["bezoars"] == 32:
+        if "bezoars" in data.inventory.inventory["components"] and data.inventory.inventory["components"]["bezoars"] >= 32:
             data.achievements.unlock("32 bezoars")
-            data.save()
-            print("DATA SAVED!")
-        if "Cinnabar" in data.inventory.inventory and data.inventory.inventory["Cinnabar"] == 64:
+        if "Cinnabar" in data.inventory.inventory["components"] and data.inventory.inventory["components"]["Cinnabar"] >= 64:
             data.achievements.unlock("64g Cinnabar")
-            data.save()
-            print("DATA SAVED!")
-        if "Vitriol of Mars" in data.inventory.inventory and data.inventory.inventory["Vitriol of Mars"] == 128:
+        if "Vitriol of Mars" in data.inventory.inventory["components"] and data.inventory.inventory["components"]["Vitriol of Mars"] >= 128:
             data.achievements.unlock("128mol Vitriol of Mars")
-            data.save()
-            print("DATA SAVED!")
-        if "Dragon's Horn" in data.inventory.inventory and data.inventory.inventory["Dragon's Horn"] == 1:
+        if "Dragon's Horn" in data.inventory.inventory["components"] and data.inventory.inventory["components"]["Dragon's Horn"] >= 1:
             data.achievements.unlock("Dragon's Horn")
-            data.save()
-            print("DATA SAVED!")
-        if "spoon" in data.inventory.inventory and data.inventory.inventory["spoon"] == 0:
+        if "spoon" in data.inventory.inventory["materials"] and data.inventory.inventory["materials"]["spoon"] <= 0:
             print("Your spoon was vaporized!")
             data.achievements.unlock("Its gone??")
-            data.save()
-            print("DATA SAVED!")
 
         if data.achievements.all == data.achievements.unlocked:
-            print("You have collected everything possible!")
+            print(Pretty.perfect("You have collected everything possible!"))
             data.achievements.unlock("Master Alchemist!")
-            data.save()
-            print("DATA SAVED!")
+            print(Pretty.perfect("Made by ME for my 21-22 AP Computer Science Principles Create Task"))
 
 
 class Information:
@@ -108,7 +99,7 @@ class Information:
         self.player_info = info_data
         self.name = info_data["name"]
         self.position = info_data["position"]
-        print("User Data synced!")
+        print(Pretty.perfect("User Data synced!") + "\u2705")
 
     def set_position(self, pos) -> None:
         self.position = pos
@@ -116,17 +107,17 @@ class Information:
 
 class Inventory:
     def __init__(self, inventory_data: Dict) -> None:
-        self.inventory = inventory_data
-        print("Inventory Loaded!")
+        self.inventory: Dict[Dict[str,int]] = inventory_data
+        print(Pretty.perfect("Inventory Loaded!") + "\u2705")
 
-    def add_items(self, category: str, *, items: List[Tuple[str, int]]):
+    def add_items(self, category: str, items: List[Tuple[str, int]]) -> None:
         for item in items:
             if item[0] not in self.inventory[category]:
                 self.inventory[category][item[0]] = item[1]
             else:
                 self.inventory[category][item[0]] += item[1]
 
-    def view_items(self, category: Optional[str] = None) -> List[str]:
+    def view_items(self, category: Optional[str] = None) -> str:
         output: str = ""
         if category:
             output += f"{category}:\n"
@@ -146,33 +137,31 @@ class Commands:
 
     # collegeboard function
     @classmethod
-    def move(self, data: PlayerData, directions: List[str]):
+    def move(self, data, directions):
         player_pos = data.area_map.player_cursor.copy()
         if not directions:
-            return "Try that again, but with a direction (up, down, left, right)"
+            return Pretty.warn("Try that again, but with a direction (up, down, left, right)")
         for direction in directions:
             if direction == "up":
                 player_pos[0] -= 1
                 if (player_pos[0] <= 0):
                     player_pos[0] = 0
-                    print("You cannot move farther up")
+                    print(Pretty.warn("You cannot move farther up"))
             elif direction == "down":
                 player_pos[0] += 1
                 if (player_pos[0] >= 14):
                     player_pos[0] = 14
-                    print("You cannot move farther down")
+                    print(Pretty.warn("You cannot move farther down"))
             elif direction == "left":
                 player_pos[1] -= 1
                 if (player_pos[1] <= 0):
                     player_pos[1] = 0
-                    print("You cannot move farther left")
+                    print(Pretty.warn("You cannot move farther left"))
             elif direction == "right":
-                print("debur")
                 player_pos[1] += 1
-                print("added")
                 if (player_pos[1] >= 14):
                     player_pos[1] = 14
-                    print("You cannot move farther right")
+                    print(Pretty.warn("You cannot move farther right"))
         data.area_map.move_player(player_pos)
         return "Surroundings: " + ", ".join(data.area_map.reveal_items())
 
@@ -181,38 +170,72 @@ class Commands:
     #     data.save()
 
     @classmethod
-    def stop(self, data: PlayerData):
+    def stop(self, data: PlayerData) -> None:
         data.area_map.area_map[data.area_map.player_cursor[0]
                                ][data.area_map.player_cursor[1]].remove("player")
         exit()
 
     @classmethod
-    def inventory(self, data: PlayerData):
+    def inventory(self, data: PlayerData, category: List[str] = None) -> str:
         output: str = ""
-        categories: str = data.inventory.view_items()
-        print("Choose a category:\n", categories)
-        cat = input("Category >> ")
-        output += data.inventory.view_items(cat)
+        if not category:
+            categories: str = data.inventory.view_items()
+            print("Choose a category:\n", categories)
+            cat = input("Category >> ")
+            output += data.inventory.view_items(cat)
+        else:
+            output += data.inventory.view_items(category[0])
         return output
 
     @classmethod
-    def grab(self, data: PlayerData, item: List[str]):
+    def grab(self, data: PlayerData, item: List[str]) -> str:
         data.inventory.add_items(
             category=items[item[0]][0]+"s", 
             items=[(item, 1)])
+        return f"{str(item).replace('[', '').replace(']', '')} added"
 
     @classmethod
-    def help(self, data: PlayerData):
-        print("Command list")
+    def help(self, data: PlayerData) -> str:
+        
+        cmd_list: List[str] = [
+
+        ]
+        return f"Command List:\n\n"+'\n'.join(cmd_list)
+        
 
     @classmethod
-    def show(self, data: PlayerData):
+    def show(self, data: PlayerData) -> str:
         return str(data.area_map.player_cursor) + " - " + ", ".join(data.area_map.reveal_items())
 
     @classmethod
-    def hunt(self, data: PlayerData, animal: str):
-        if animal in animals:
-            data.inventory.add_items("materials", animals[animal])
-            return f"You have recieved {animals[animal][1]} {animals[animal][0]}{'s.' if animals[animal][1] > 1 else '.'}"
-        else:
-            return "This is not a valid animal! Maybe use 'grab' instead."
+    def hunt(self, data: PlayerData, huntedAnimal: str) -> str:
+        for animal in huntedAnimal:
+            if animal in animals and animal not in data.area_map.area_map[data.area_map.player_cursor[0]][data.area_map.player_cursor[1]]:
+                return Pretty.warn(f"{animal} is not present in the area")
+            elif animal in animals:
+                data.inventory.add_items("components", [animals[animal]])
+                data.area_map.area_map[data.area_map.player_cursor[0]][data.area_map.player_cursor[1]].remove(animal)
+                return Pretty.success(f"You have recieved {animals[animal][1]} {animals[animal][0]}{'s.' if animals[animal][1] > 1 else '.'}")
+            else:
+                return Pretty.warn("This is not a valid animal! Maybe use 'grab' instead.")
+
+    @classmethod
+    def achievements(self, data: PlayerData) -> str:
+        colored_achieves: List[str] = data.achievements.all.copy()
+        for i, achieve in enumerate(colored_achieves):
+            if achieve in data.achievements.unlocked:
+                colored_achieves[i] = Pretty.perfect(achieve)
+        return Pretty.okay("Achievements:") + "\n\n    " + "\n    ".join(colored_achieves)
+
+class Pretty:
+    def warn(text) -> str:
+        return "\u001b[1;93m" + text + "\u001b[0m"
+
+    def success(text) -> str:
+        return "\u001b[1;96m" + text + "\u001b[0m"
+
+    def okay(text) -> str:
+        return "\u001b[1;34m" + text + "\u001b[0m"
+        
+    def perfect(text) -> str:
+        return "\u001b[1;92m" + text + "\u001b[0m"
