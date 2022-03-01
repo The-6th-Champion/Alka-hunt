@@ -1,6 +1,6 @@
 from typing import List, Dict, Optional, Union, Tuple, Callable
 from helper_classes import *
-from global_vars import items
+from global_vars import itemInfo
 
 commands: Dict[str, Callable] = {
     "save": Commands.tbd,
@@ -27,6 +27,7 @@ def game(player_data: PlayerData) -> None:
             print(commands[prompt[0]](data=player_data))
         else:
             print("this is not a command. use the 'help' command for a list of commands.")
+            print ("hi")
 
         Achievements.inventoryListener(player_data)
 
@@ -36,7 +37,7 @@ if __name__ == '__main__':
                               ] = {
   "player": {
     "name": "",
-    "position": [7, 7]
+    "position": [0, 0]
   },
   "inventory": {
     "materials": {
@@ -61,7 +62,7 @@ if __name__ == '__main__':
   "newGame": True,
   "area_map": [
     [
-      ["goat", "goat", "steel sword"],
+      ["goat", "goat", "sword"],
       [],
       [],
       [],

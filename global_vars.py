@@ -1,7 +1,7 @@
 from typing import Dict, List, Tuple
 
-items: Dict[str, Tuple[str, str]] = {
-    "steal sword": ("weapon", "A relatively weak weapon, can be used to attack most animals"),
+itemInfo: Dict[str, Tuple[str, str]] = {
+    "sword": ("weapon", "A relatively weak weapon, can be used to attack most animals"),
     "hot sword": ("weapon", "A sword that's blade is hot enough to easily cauterize wounds, set fire to things, and cause a great deal of damage. It is made by forging steel sword and cinnabar together."),
     "firewood": ("material", "to be used for heating up solutions"),
     "spoon": ("material", "A very versitile utensil that is capable of being used for making Alkahest."),

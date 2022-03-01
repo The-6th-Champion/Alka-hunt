@@ -76,7 +76,9 @@ class Achievements:
             print(Pretty.perfect("CONGRADULATIONS, YOU HAVE FINISHED THE GAME!"))
             data.gameover = True
             data.achievements.unlock("Alkahest")
+        print(data.inventory.inventory["components"])
         if "bezoars" in data.inventory.inventory["components"] and data.inventory.inventory["components"]["bezoars"] >= 32:
+            print("yes")
             data.achievements.unlock("32 bezoars")
         if "Cinnabar" in data.inventory.inventory["components"] and data.inventory.inventory["components"]["Cinnabar"] >= 64:
             data.achievements.unlock("64g Cinnabar")
@@ -132,7 +134,7 @@ class Inventory:
 class Commands:
 
     @classmethod
-    def tbd(self) -> None:
+    def tbd(self, bruh = None) -> None:
         pass
 
     # collegeboard function
@@ -189,9 +191,12 @@ class Commands:
 
     @classmethod
     def grab(self, data: PlayerData, item: List[str]) -> str:
-        data.inventory.add_items(
-            category=items[item[0]][0]+"s", 
-            items=[(item, 1)])
+        for i in range(len(item)):
+            if item[i] in data.area_map.area_map[data.area_map.player_cursor[0]][data.area_map.player_cursor[1]]:
+                data.inventory.add_items(
+                    category=itemInfo[item[i]][0]+"s", 
+                    items=[(item[i], 1)])
+                data.area_map.area_map[data.area_map.player_cursor[0]][data.area_map.player_cursor[1]].remove(item[i])
         return f"{str(item).replace('[', '').replace(']', '')} added"
 
     @classmethod
