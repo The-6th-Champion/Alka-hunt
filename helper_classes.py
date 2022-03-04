@@ -76,9 +76,7 @@ class Achievements:
             print(Pretty.perfect("CONGRADULATIONS, YOU HAVE FINISHED THE GAME!"))
             data.gameover = True
             data.achievements.unlock("Alkahest")
-        print(data.inventory.inventory["components"])
-        if "bezoars" in data.inventory.inventory["components"] and data.inventory.inventory["components"]["bezoars"] >= 32:
-            print("yes")
+        if "bezoar" in data.inventory.inventory["components"] and data.inventory.inventory["components"]["bezoar"] >= 32:
             data.achievements.unlock("32 bezoars")
         if "Cinnabar" in data.inventory.inventory["components"] and data.inventory.inventory["components"]["Cinnabar"] >= 64:
             data.achievements.unlock("64g Cinnabar")
@@ -140,7 +138,7 @@ class Commands:
     # collegeboard function
     @classmethod
     def move(self, data, directions):
-        player_pos = data.area_map.player_cursor.copy()
+        player_pos: List[int] = data.area_map.player_cursor.copy()
         if not directions:
             return Pretty.warn("Try that again, but with a direction (up, down, left, right)")
         for direction in directions:
@@ -244,3 +242,25 @@ class Pretty:
         
     def perfect(text) -> str:
         return "\u001b[1;92m" + text + "\u001b[0m"
+
+
+"""
+map:
+[
+[x x x x x x x x x x x x x x x],
+[x x x x x x x x x x x x x x x],
+[x x x x x x x x x x x x x x x],
+[x x x x x x x x x x x x x x x],
+[x x x x x x x x x x x x x x x],
+[x x x x x x x x x x x x x x x],
+[x x x x x x x x x x x x x x x],
+[x x x x x x x x x x x x x x x],
+[x x x x x x x x x x x x x x x],
+[x x x x x x x x x x x x x x x],
+[x x x x x x x x x x x x x x x],
+[x x x x x x x x x x x x x x x],
+[x x x x x x x x x x x x x x x],
+[x x x x x x x x x x x x x x x],
+[x x x x x x x x x x x x x x x],
+]
+"""
