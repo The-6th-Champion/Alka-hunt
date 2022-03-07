@@ -17,6 +17,9 @@ commands: Dict[str, Callable] = {
 def game(player_data: PlayerData) -> None:
     # Game loop
     while True:
+
+        Achievements.inventoryListener(player_data)
+
         prompt: List[str] = input("\n>> ").strip().split(" ")
         if not prompt:
             continue
@@ -29,7 +32,6 @@ def game(player_data: PlayerData) -> None:
             print("this is not a command. use the 'help' command for a list of commands.")
             print ("hi")
 
-        Achievements.inventoryListener(player_data)
 
 
 if __name__ == '__main__':

@@ -1,4 +1,3 @@
-from re import sub
 from typing import List, Optional, Tuple, Dict
 from global_vars import *
 
@@ -138,6 +137,9 @@ class Commands:
     # collegeboard function
     @classmethod
     def move(self, data, directions):
+        """
+        the data parameter is of type PlayerData
+        """
         player_pos: List[int] = data.area_map.player_cursor.copy()
         if not directions:
             return Pretty.warn("Try that again, but with a direction (up, down, left, right)")
