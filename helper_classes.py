@@ -230,6 +230,20 @@ class Commands:
                 colored_achieves[i] = Pretty.perfect(achieve)
         return Pretty.okay("Achievements:") + "\n\n    " + "\n    ".join(colored_achieves)
 
+    @classmethod
+    def stove(self, data: PlayerData) -> str:
+        if "firewood" in data.inventory.inventory["materials"]:
+            if data.inventory.inventory["materials"]["firewood"] >= 2:
+                data.inventory.inventory["materials"]["firewood"] -= 2
+                data.area_map.area_map[data.area_map.player_cursor[0]][data.area_map.player_cursor[1]].append("stove")
+                return Pretty.success(f"You have build a stove at this position! ({str(data.area_map.player_cursor).strip('[]')})",  )
+        return Pretty.warn("You need 2 firewood to make a stove!")
+
+    @classmethod
+    def craft(self, data: PlayerData) -> str:
+        print(Pretty.okay("What would you like to make?\n\n    1. Alkahest\n    2. Vitriol of Mars\n    3. hot sword"))
+        input("craft >> ")
+        pass
 class Pretty:
     def warn(text) -> str:
         return "\u001b[1;93m" + text + "\u001b[0m"
