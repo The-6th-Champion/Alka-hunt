@@ -243,8 +243,27 @@ class Commands:
 
     @classmethod
     def craft(self, data: PlayerData) -> str:
-        print(Pretty.okay("What would you like to make?\n\n    1. Alkahest\n    2. Vitriol of Mars\n    3. hot sword"))
-        input("craft >> ")
+        print(Pretty.okay("What would you like to make? (type the number)\n\n    1. Alkahest\n    2. Vitriol of Mars\n    3. hot sword"))
+        item = input("craft >> ")
+        if item == "1":
+            if ("Vitriol of Mars" in data.inventory.inventory["components"] and  data.inventory.inventory["components"]["Vitriol of Mars"]) >= 128 \
+            and ("Cinnabar" in data.inventory.inventory["components"] and data.inventory.inventory["components"]["Cinnabar"]) >= 64 \
+            and ("bezoar" in data.inventory.inventory["components"] and data.inventory.inventory["components"]["bezoar"]) >= 32 \
+            and ("Dragon's Horn" in data.inventory.inventory["components"] and data.inventory.inventory["components"]["Dragon's Horn"]) >= 1 \
+            and ("spoon" in data.inventory.inventory["materials"] and data.inventory.inventory["materials"]["spoon"]) >= 1:
+                data.inventory.inventory["components"]["Vitriol of Mars"] -= 128
+                data.inventory.inventory["components"]["Cinnabar"] -= 64
+                data.inventory.inventory["components"]["bezoar"] -= 32
+                data.inventory.inventory["components"]["Dragon's Horn"] -= 1
+                return Pretty.success(f"You have crafted an Alkahest!")
+            else:
+                return Pretty.warn("You need a bunch of stuff to craft an Alkahest! (check achievements ;)")
+        elif item == "2":
+            if ("iron shavings" in data.inventory.inventory["materials"] and  data.inventory.inventory["materials"]["iron shavings"]) >= 128 \
+            and ("sulfate" in data.inventory.inventory["materials"] and data.inventory.inventory["materials"]["sulfate"]) >= 128:
+                data.inventory.inventory["materials"]["iron shavings"] -= 128
+                data.inventory.inventory["materials"]["sulfate"] -= 128
+                return Pretty.success(f"You have crafted a Vitriol of Mars!")
         pass
 class Pretty:
     def warn(text) -> str:
