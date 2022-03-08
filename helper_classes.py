@@ -15,27 +15,27 @@ class PlayerData:
         self.area_map: AreaMap = AreaMap(
             map_data=load_data["area_map"], current_position=load_data["player"]["position"])
 
-    # def save(self) -> str:
-    #     import json
-    #     self.player_info.position = self.area_map.player_cursor
-    #     self.area_map.area_map[self.area_map.player_cursor[0]
-    #                            ][self.area_map.player_cursor[1]].remove("player")
-    #     data = {
-    #         "player": self.player_info.player_info,
-    #         "inventory": self.inventory.inventory,
-    #         "achievements": {
-    #             "all": self.achievements.all,
-    #             "unlocked": self.achievements.unlocked
-    #         },
-    #         "gameover": self.gameover,
-    #         "newGame": False,
-    #         "area_map": self.area_map.area_map
-    #     }
-    #     with open(".\data\playerData.json", "w") as fpdata:
-    #         fpdata.write(json.dumps(data, indent=4))
-    #     self.area_map.area_map[self.area_map.player_cursor[0]
-    #                            ][self.area_map.player_cursor[1]].append("player")
-    #     return f"Saved Successfully, {data['player']['name']}"
+    def save(self) -> str:
+        import json
+        self.player_info.position = self.area_map.player_cursor
+        self.area_map.area_map[self.area_map.player_cursor[0]
+                            ][self.area_map.player_cursor[1]].remove("player")
+        data = {
+            "player": self.player_info.player_info,
+            "inventory": self.inventory.inventory,
+            "achievements": {
+                "all": self.achievements.all,
+                "unlocked": self.achievements.unlocked
+            },
+            "gameover": self.gameover,
+            "newGame": False,
+            "area_map": self.area_map.area_map
+        }
+        with open(".\data\playerData.json", "w") as fpdata:
+            fpdata.write(json.dumps(data, indent=4))
+        self.area_map.area_map[self.area_map.player_cursor[0]
+                            ][self.area_map.player_cursor[1]].append("player")
+        return f"Saved Successfully, {data['player']['name']}"
 
 
 class AreaMap:
@@ -133,11 +133,21 @@ class Commands:
 
     @classmethod
     def tbd(self, bruh = None) -> None:
+        """
+        Unimplemented command, check back later!
+        """
         pass
 
     # collegeboard function
     @classmethod
     def move(self, data, directions):
+        """
+        Use this to move the player in the direction(s) specified.
+        Usage:
+            move <direction>
+            move <direction> ... <direction>
+            move up down right right left
+        """
         player_pos: List[int] = data.area_map.player_cursor.copy()
         if not directions:
             return Pretty.warn("Try that again, but with a direction (up, down, left, right)")
@@ -171,12 +181,23 @@ class Commands:
 
     @classmethod
     def stop(self, data: PlayerData) -> None:
+        """
+        Stop the game, without erroring it :)
+        Usage:
+            stop
+        """
         data.area_map.area_map[data.area_map.player_cursor[0]
                                ][data.area_map.player_cursor[1]].remove("player")
         exit()
 
     @classmethod
     def inventory(self, data: PlayerData, category: List[str] = None) -> str:
+        """
+        View your inventory. You can also specify a category to view.
+        Usage:
+            inventory
+            inventory [category]
+        """
         output: str = ""
         if not category:
             categories: str = data.inventory.view_items()
@@ -198,12 +219,25 @@ class Commands:
         return f"{str(item).replace('[', '').replace(']', '')} added"
 
     @classmethod
-    def help(self, data: PlayerData) -> str:
-        
-        cmd_list: List[str] = [
+    def help(self, data: PlayerData, command: List[str] = []) -> str:
+        """
+        Print out the help text for each command.
+        """
+        all_commands: Dict[str, str] = {method: getattr(self, method).__doc__ for method in dir(self) if method[0] != "_"}
+        if command != []:
+            if command[0] in all_commands:
+                return all_commands[command[0]]
+            else:
+                return f"Command not found: {command[0]}"
+        else:
+            output: str = ""
+            for method in sorted(list(all_commands.keys())):
+                output += Pretty.okay(f"    {method}\n")
 
-        ]
-        return f"Command List:\n\n"+'\n'.join(cmd_list)
+            return f"""
+Command List:
+{output}
+{Pretty.warn('Please redo your command with the name of a command for more info')}"""
         
 
     @classmethod

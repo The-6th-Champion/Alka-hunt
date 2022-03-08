@@ -1,3 +1,4 @@
+import json
 from typing import List, Dict, Optional, Union, Tuple, Callable
 from helper_classes import *
 from global_vars import itemInfo
@@ -11,6 +12,8 @@ commands: Dict[str, Callable] = {
     "help": Commands.help,
     "show": Commands.show,
     "hunt": Commands.hunt,
+    "stove": Commands.stove,
+    "craft": Commands.craft,
     "achievements": Commands.achievements,
 }
 
@@ -33,51 +36,8 @@ def game(player_data: PlayerData) -> None:
 
 
 if __name__ == '__main__':
-    raw_player_data: Dict[str, Union[str, Dict[str, int]]
-                              ] = {
-  "player": {
-    "name": "",
-    "position": [0, 0]
-  },
-  "inventory": {
-    "materials": {
-      "spoon": 1,
-      "sulfate": 128
-    },
-    "weapons": {},
-    "components": {}
-  },
-  "achievements": {
-    "all": [
-      "32 bezoars",
-      "64g Cinnabar",
-      "128mol Vitriol of Mars",
-      "Dragon's Horn",
-      "Its gone??",
-      "Alkahest"
-    ],
-    "unlocked": []
-  },
-  "gameover": False,
-  "newGame": True,
-  "area_map": [
-    [["goat", "goat", "sword"],[],[],[],[],[],[],[],[],[],[],[],[],[],[]],
-    [[], [], [], [], [], [], [], [], [], [], [], [], [], [], []],
-    [["firewood"],["firewood"],["firewood"],["firewood"],["firewood"],["firewood"],[],[],[],[],[],[],[],[],[]],
-    [["firewood"],["firewood"],["firewood"],["firewood"],["firewood"],["firewood"],[],[],[],[],[],[],[],[],[]],
-    [["firewood"],["firewood"],["firewood"],["firewood"],["firewood"],["firewood"],[],[],[],[],[],["goat", "goat"],["goat", "goat"],[],[]],
-    [[],[],[],[],[],[],[],[],[],["bird", "goat"],["goat", "goat"],[],["bird"],[],[]],
-    [[],[],[],[],[],[],[],[],[],["bird", "goat"],["goat", "goat"],[],[],[],[]],
-    [[],[],[],[],[],[],[],[],[],["bird", "goat"],["goat", "goat"],[],[],[],[]],
-    [[],[],[],[],[],[],[],[],[],["bird", "goat"],["goat", "goat"],[],[],[],[]],
-    [[], [], [], [], [], [], [], [], [], [], [], [], [], [], []],
-    [[], [], [], [], [], [], [], [], [], [], [], [], [], [], []],
-    [[],[],[],[],[],[],[],[],[],[],["dragon", "Cinnabar", "Cinnabar"],["Cinnabar", "Cinnabar", "Cinnabar"],["Cinnabar", "Cinnabar", "Cinnabar"],["Cinnabar", "Cinnabar", "Cinnabar"],["Cinnabar", "Cinnabar", "Cinnabar"]],
-    [[],[],[],[],[],[],[],[],[],[],[],["Cinnabar", "Cinnabar", "Cinnabar"],["Cinnabar", "Cinnabar", "Cinnabar"],["Cinnabar", "Cinnabar", "Cinnabar"]],
-    [[],[],[],[],[],[],[],[],[],[],[],[],["bird", "Cinnabar", "Cinnabar", "Cinnabar"],["Cinnabar", "Cinnabar", "Cinnabar"],["Cinnabar", "Cinnabar", "Cinnabar"]],
-    [[],[],[],[],[],[],[],[],[],[],[],[],[],["Cinnabar", "Cinnabar", "Cinnabar"],["Cinnabar", "Cinnabar", "Cinnabar"]]
-  ]
-}
+    with open("playerData.json", "r") as f:
+      raw_player_data: Dict[str, Union[str, Dict[str, int]]] = json.load(f)
 
     if raw_player_data["newGame"] == True:
         raw_player_data["player"]["name"] = input("Enter player name >> ")
