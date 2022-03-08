@@ -1,4 +1,3 @@
-from re import sub
 from typing import List, Optional, Tuple, Dict
 from global_vars import *
 
