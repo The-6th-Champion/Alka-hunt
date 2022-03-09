@@ -233,10 +233,8 @@ class Commands:
             for method in sorted(list(all_commands.keys())):
                 output += Pretty.okay(f"    {method}\n")
 
-            return f"""
-Command List:
-{output}
-{Pretty.warn('Please redo your command with the name of a command for more info')}"""
+            return f"\nCommand List:\n{output}\n{Pretty.warn('Type help <command> for more information')}"
+
         
 
     @classmethod
