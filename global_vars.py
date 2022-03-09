@@ -15,7 +15,7 @@ itemInfo: Dict[str, Tuple[str, str]] = {
 }
 
 animals: Dict[str, Tuple[str, int]] = {
-    "goat": ("bezoar", 3),
-    "bird": ("bezoar", 1),
-    "dragon": ("bezoar", 20)
+    "goat": ("bezoar", 3, ["sword", "hot sword"]),
+    "bird": ("bezoar", 1, ["sword", "hot sword"]),
+    "dragon": ("bezoar", 20, ["hot sword"]),
 }
