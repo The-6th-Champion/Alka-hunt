@@ -4,7 +4,7 @@ from helper_classes import *
 from global_vars import itemInfo
 
 commands: Dict[str, Callable] = {
-    "save": Commands.tbd,
+    "save": Commands.save,
     "stop": Commands.stop,
     "inventory": Commands.inventory,
     "grab": Commands.grab,
@@ -38,7 +38,7 @@ def game(player_data: PlayerData) -> None:
 
 
 if __name__ == '__main__':
-    with open("playerData.json", "r") as f:
+    with open("data\\playerData.json", "r") as f:
       raw_player_data: Dict[str, Union[str, Dict[str, int]]] = json.load(f)
 
     if raw_player_data["newGame"] == True:
