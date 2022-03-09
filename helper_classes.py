@@ -18,7 +18,7 @@ class PlayerData:
         import json
         self.player_info.position = self.area_map.player_cursor
         self.area_map.area_map[self.area_map.player_cursor[0]
-                            ][self.area_map.player_cursor[1]].remove("player")
+                               ][self.area_map.player_cursor[1]].remove("player")
         data = {
             "player": self.player_info.player_info,
             "inventory": self.inventory.inventory,
@@ -33,7 +33,7 @@ class PlayerData:
         with open(".\data\playerData.json", "w") as fpdata:
             fpdata.write(json.dumps(data, indent=4))
         self.area_map.area_map[self.area_map.player_cursor[0]
-                            ][self.area_map.player_cursor[1]].append("player")
+                               ][self.area_map.player_cursor[1]].append("player")
         return f"Saved Successfully, {data['player']['name']}"
 
 
@@ -54,7 +54,8 @@ class AreaMap:
         return True
 
     def reveal_items(self) -> List[str]:
-        items: List[str] = self.area_map[self.player_cursor[0]][self.player_cursor[1]].copy()
+        items: List[str] = self.area_map[self.player_cursor[0]
+                                         ][self.player_cursor[1]].copy()
         items.remove("player")
         return items
 
@@ -90,7 +91,8 @@ class Achievements:
         if data.achievements.all == data.achievements.unlocked:
             print(Pretty.perfect("You have collected everything possible!"))
             data.achievements.unlock("Master Alchemist!")
-            print(Pretty.perfect("Made by ME for my 21-22 AP Computer Science Principles Create Task"))
+            print(Pretty.perfect(
+                "Made by ME for my 21-22 AP Computer Science Principles Create Task"))
 
 
 class Information:
@@ -106,7 +108,7 @@ class Information:
 
 class Inventory:
     def __init__(self, inventory_data: Dict) -> None:
-        self.inventory: Dict[Dict[str,int]] = inventory_data
+        self.inventory: Dict[Dict[str, int]] = inventory_data
         print(Pretty.perfect("Inventory Loaded!") + "\u2705")
 
     def add_items(self, category: str, items: List[Tuple[str, int]]) -> None:
@@ -131,7 +133,7 @@ class Inventory:
 class Commands:
 
     @classmethod
-    def tbd(self, bruh = None) -> None:
+    def tbd(self, bruh=None) -> None:
         """
         Unimplemented command, check back later!
         """
@@ -212,9 +214,10 @@ class Commands:
         for i in range(len(item)):
             if item[i] in data.area_map.area_map[data.area_map.player_cursor[0]][data.area_map.player_cursor[1]]:
                 data.inventory.add_items(
-                    category=itemInfo[item[i]][0]+"s", 
+                    category=itemInfo[item[i]][0]+"s",
                     items=[(item[i], 1)])
-                data.area_map.area_map[data.area_map.player_cursor[0]][data.area_map.player_cursor[1]].remove(item[i])
+                data.area_map.area_map[data.area_map.player_cursor[0]
+                                       ][data.area_map.player_cursor[1]].remove(item[i])
         return f"{str(item).replace('[', '').replace(']', '')} added"
 
     @classmethod
@@ -225,7 +228,8 @@ class Commands:
             help
             help [command]
         """
-        all_commands: Dict[str, str] = {method: getattr(self, method).__doc__ for method in dir(self) if method[0] != "_"}
+        all_commands: Dict[str, str] = {method: getattr(
+            self, method).__doc__ for method in dir(self) if method[0] != "_"}
         if command != []:
             if command[0] in all_commands:
                 return all_commands[command[0]]
@@ -240,7 +244,6 @@ class Commands:
 Command List:
 {output}
 {Pretty.warn('Please redo your command with the name of a command for more info')}"""
-        
 
     @classmethod
     def show(self, data: PlayerData) -> str:
@@ -258,13 +261,14 @@ Command List:
         Usage:
             hunt <animal>
         """
-        
+
         for animal in huntedAnimal:
             if animal in animals and animal not in data.area_map.area_map[data.area_map.player_cursor[0]][data.area_map.player_cursor[1]]:
                 return Pretty.warn(f"{animal} is not present in the area")
             elif animal in animals:
                 data.inventory.add_items("components", [animals[animal]])
-                data.area_map.area_map[data.area_map.player_cursor[0]][data.area_map.player_cursor[1]].remove(animal)
+                data.area_map.area_map[data.area_map.player_cursor[0]
+                                       ][data.area_map.player_cursor[1]].remove(animal)
                 return Pretty.success(f"You have recieved {animals[animal][1]} {animals[animal][0]}{'s.' if animals[animal][1] > 1 else '.'}")
             else:
                 return Pretty.warn("This is not a valid animal! Maybe use 'grab' instead.")
@@ -295,8 +299,9 @@ Command List:
         if "firewood" in data.inventory.inventory["materials"]:
             if data.inventory.inventory["materials"]["firewood"] >= 2:
                 data.inventory.inventory["materials"]["firewood"] -= 2
-                data.area_map.area_map[data.area_map.player_cursor[0]][data.area_map.player_cursor[1]].append("stove")
-                return Pretty.success(f"You have build a stove at this position! ({str(data.area_map.player_cursor).strip('[]')})",  )
+                data.area_map.area_map[data.area_map.player_cursor[0]
+                                       ][data.area_map.player_cursor[1]].append("stove")
+                return Pretty.success(f"You have build a stove at this position! ({str(data.area_map.player_cursor).strip('[]')})",)
         return Pretty.warn("You need 2 firewood to make a stove!")
 
     @classmethod
@@ -308,35 +313,38 @@ Command List:
             craft [item]
             craft [item] [quantity]
         """
-        print(Pretty.okay("What would you like to make? (type the number)\n\n    1. Alkahest\n    2. Vitriol of Mars\n    3. hot sword"))
+        print(Pretty.okay(
+            "What would you like to make? (type the number)\n\n    1. Alkahest\n    2. Vitriol of Mars\n    3. hot sword"))
         item = input("craft >> ")
         if item == "1":
             if ("Vitriol of Mars" in data.inventory.inventory["components"] and data.inventory.inventory["components"]["Vitriol of Mars"]) >= 128*quantity \
-            and ("Cinnabar" in data.inventory.inventory["components"] and data.inventory.inventory["components"]["Cinnabar"]) >= 64*quantity \
-            and ("bezoar" in data.inventory.inventory["components"] and data.inventory.inventory["components"]["bezoar"]) >= 32*quantity \
-            and ("Dragon's Horn" in data.inventory.inventory["components"] and data.inventory.inventory["components"]["Dragon's Horn"]) >= 1*quantity \
-            and ("spoon" in data.inventory.inventory["materials"] and data.inventory.inventory["materials"]["spoon"]) >= 1*quantity:
+                    and ("Cinnabar" in data.inventory.inventory["components"] and data.inventory.inventory["components"]["Cinnabar"]) >= 64*quantity \
+                    and ("bezoar" in data.inventory.inventory["components"] and data.inventory.inventory["components"]["bezoar"]) >= 32*quantity \
+                    and ("Dragon's Horn" in data.inventory.inventory["components"] and data.inventory.inventory["components"]["Dragon's Horn"]) >= 1*quantity \
+                    and ("spoon" in data.inventory.inventory["materials"] and data.inventory.inventory["materials"]["spoon"]) >= 1*quantity:
                 data.inventory.inventory["components"]["Vitriol of Mars"] -= 128*quantity
                 data.inventory.inventory["components"]["Cinnabar"] -= 64*quantity
                 data.inventory.inventory["components"]["bezoar"] -= 32*quantity
                 data.inventory.inventory["components"]["Dragon's Horn"] -= 1*quantity
                 data.inventory.inventory["materials"]["spoon"] -= 1*quantity
-                data.inventory.add_items("components", [("Alkahest", quantity)])
+                data.inventory.add_items(
+                    "components", [("Alkahest", quantity)])
                 return Pretty.success(f"You have crafted an Alkahest!")
             else:
                 return Pretty.warn("You need a bunch of stuff to craft an Alkahest! (check achievements ;)")
         elif item == "2":
             if ("iron shavings" in data.inventory.inventory["materials"] and data.inventory.inventory["weapons"]["sword"]) >= 1*quantity \
-            and ("sulfate" in data.inventory.inventory["materials"] and data.inventory.inventory["materials"]["sulfate"]) >= 1*quantity:
+                    and ("sulfate" in data.inventory.inventory["materials"] and data.inventory.inventory["materials"]["sulfate"]) >= 1*quantity:
                 data.inventory.inventory["materials"]["iron shavings"] -= 1*quantity
                 data.inventory.inventory["materials"]["sulfate"] -= 1*quantity
-                data.inventory.add_items("components", [("Vitriol of Mars", quantity)])
+                data.inventory.add_items(
+                    "components", [("Vitriol of Mars", quantity)])
                 return Pretty.success(f"You have crafted a Vitriol of Mars!")
             else:
                 return Pretty.warn("You need a 1:1 ratio of iron shavings and sulfate to craft a Vitriol of Mars!")
         elif item == "3":
             if ("sword" in data.inventory.inventory["weapons"] and data.inventory.inventory["weapons"]["sword"]) >= 1*quantity \
-            and ("Cinnabar" in data.inventory.inventory["components"] and data.inventory.inventory["components"]["Cinnabar"]) >= 3*quantity:
+                    and ("Cinnabar" in data.inventory.inventory["components"] and data.inventory.inventory["components"]["Cinnabar"]) >= 3*quantity:
                 data.inventory.inventory["weapons"]["sword"] -= 1*quantity
                 data.inventory.inventory["components"]["Cinnabar"] -= 3*quantity
                 data.inventory.add_items("weapons", [("hot sword", quantity)])
@@ -348,6 +356,7 @@ Command List:
         else:
             return Pretty.warn("That is not a valid item!")
 
+
 class Pretty:
     def warn(text) -> str:
         return "\u001b[1;93m" + text + "\u001b[0m"
@@ -357,7 +366,7 @@ class Pretty:
 
     def okay(text) -> str:
         return "\u001b[1;34m" + text + "\u001b[0m"
-        
+
     def perfect(text) -> str:
         return "\u001b[1;92m" + text + "\u001b[0m"
 

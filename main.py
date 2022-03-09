@@ -17,6 +17,7 @@ commands: Dict[str, Callable] = {
     "achievements": Commands.achievements,
 }
 
+
 def game(player_data: PlayerData) -> None:
     # Game loop
     while True:
@@ -33,13 +34,12 @@ def game(player_data: PlayerData) -> None:
             print(commands[prompt[0]](data=player_data))
         else:
             print("this is not a command. use the 'help' command for a list of commands.")
-            print ("hi")
-
+            print("hi")
 
 
 if __name__ == '__main__':
     with open("data\\playerData.json", "r") as f:
-      raw_player_data: Dict[str, Union[str, Dict[str, int]]] = json.load(f)
+        raw_player_data: Dict[str, Union[str, Dict[str, int]]] = json.load(f)
 
     if raw_player_data["newGame"] == True:
         raw_player_data["player"]["name"] = input("Enter player name >> ")
