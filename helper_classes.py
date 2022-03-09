@@ -178,6 +178,11 @@ class Commands:
 
     @classmethod
     def save(self, data: PlayerData):
+        """
+        Saves the current game state to a file.
+        Usage:
+            save
+        """
         data.save()
 
     @classmethod
@@ -211,6 +216,11 @@ class Commands:
 
     @classmethod
     def grab(self, data: PlayerData, item: List[str]) -> str:
+        """
+        Grab an item from the current area.
+        Usage:
+            grab <item>
+        """
         for i in range(len(item)):
             if item[i] in data.area_map.area_map[data.area_map.player_cursor[0]][data.area_map.player_cursor[1]]:
                 data.inventory.add_items(
