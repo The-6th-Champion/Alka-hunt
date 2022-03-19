@@ -1,6 +1,7 @@
 import json
 from typing import List, Dict, Optional, Union, Tuple, Callable
-from helper_classes import *
+from extensions.control_help import *
+from extensions.data_vis import *
 from global_vars import itemInfo
 
 commands: Dict[str, Callable] = {
