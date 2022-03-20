@@ -1,5 +1,5 @@
 from typing import List, Tuple, Optional, Dict
-from control_help import Pretty
+from extensions.pretty import Pretty
 from global_vars import itemInfo, animals
 
 
@@ -46,7 +46,7 @@ class AreaMap:
                       ][self.player_cursor[1]].append("player")
         print(Pretty.success("Added to map!") + "\u2705")
 
-    def move_player(self, new_pos: List[str]) -> bool:
+    def move_player(self, new_pos: List[int]) -> bool:
         self.area_map[self.player_cursor[0]
                       ][self.player_cursor[1]].remove("player")
         self.player_cursor = new_pos

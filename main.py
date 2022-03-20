@@ -16,6 +16,7 @@ commands: Dict[str, Callable] = {
     "stove": Commands.stove,
     "craft": Commands.craft,
     "achievements": Commands.achievements,
+    "autoWin": Commands.developerClearMap,
 }
 
 

@@ -1,6 +1,8 @@
 from typing import List, Tuple, Optional, Dict
-from data_vis import PlayerData
+from extensions.data_vis import PlayerData
+from extensions.pretty import Pretty
 from global_vars import itemInfo, animals
+
 
 class Commands:
 
@@ -94,7 +96,7 @@ class Commands:
             grab <item>
         """
         for i in range(len(item)):
-            if item[i] in data.area_map.area_map[data.area_map.player_cursor[0]][data.area_map.player_cursor[1]]:
+            if item[i] in data.area_map.area_map[data.area_map.player_cursor[0]][data.area_map.player_cursor[1]] and item in itemInfo:
                 data.inventory.add_items(
                     category=itemInfo[item[i]][0]+"s",
                     items=[(item[i], 1)])
@@ -126,8 +128,6 @@ class Commands:
 
             return f"\nCommand List:\n{output}\n{Pretty.warn('Type help <command> for more information')}"
 
-        
-
     @classmethod
     def show(self, data: PlayerData) -> str:
         """
@@ -154,9 +154,10 @@ class Commands:
                     if weapon not in data.inventory.inventory["weapons"]:
                         return Pretty.warn(f"You do not have {weapon}")
                     else:
-                        data.inventory.add_items("components", [animals[animal]][0])
+                        data.inventory.add_items(
+                            "components", [animals[animal]][0])
                         data.area_map.area_map[data.area_map.player_cursor[0]
-                                            ][data.area_map.player_cursor[1]].remove(animal)
+                                               ][data.area_map.player_cursor[1]].remove(animal)
                         return Pretty.success(f"You have recieved {animals[animal][0][1]} {animals[animal][0][0]}{'s.' if animals[animal][0][1] > 1 else '.'}")
             else:
                 return Pretty.warn("This is not a valid animal! Maybe use 'grab' instead.")
@@ -244,13 +245,20 @@ class Commands:
         else:
             return Pretty.warn("That is not a valid item!")
 
+    @classmethod
+    def developerClearMap(self, data: PlayerData) -> None:
+        Commands.move(data, ("left "*len(data.area_map.area_map)).split(" "))
+        Commands.move(data, ("up "*len(data.area_map.area_map)).split(" "))
 
-class Pretty:
-    def warn(text) -> str:
-        return "\u001b[1;93m" + text + "\u001b[0m"
+        for y in range(0, len(data.area_map.area_map)):
+            for x in range(0, len(data.area_map.area_map)):
+                print(Commands.move(data, ["right"]))
+                print(f"{x}, {y}")
+                if data.area_map.reveal_items() != []:
+                    for item in data.area_map.area_map[x][y]:
+                        print(Commands.grab(data, item))
+                    for item in data.area_map.area_map[x][y]:
+                        print(Commands.hunt(data, item))
 
-    def okay(text) -> str:
-        return "\u001b[1;34m" + text + "\u001b[0m"
-
-    def success(text) -> str:
-        return "\u001b[1;92m" + text + "\u001b[0m"
+            Commands.move(
+                data, ("left "*len(data.area_map.area_map)).split(" ").append("down"))
